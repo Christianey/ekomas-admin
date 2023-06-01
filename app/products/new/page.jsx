@@ -16,7 +16,7 @@ let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 export default function NewProduct() {
   const formRef = useRef();
   const [formValues, setFormValues] = useState({
-    title: "1",
+    name: "1",
     description: "1",
     price: 2,
   });
@@ -40,8 +40,8 @@ export default function NewProduct() {
       </Text>
       <FormLabel>Product Name</FormLabel>
       <Input
-        name="title"
-        value={formValues.title}
+        name="name"
+        value={formValues.name}
         placeholder="Product Name"
         onChange={handleChange}
         className={inputClasses}
