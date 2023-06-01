@@ -1,8 +1,13 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 export default function Home() {
+  const { data: session } = useSession();
+
+  if (!session) return;
+
   return (
     <>
       <button
@@ -11,7 +16,16 @@ export default function Home() {
       >
         Sign Out
       </button>
-      page
+      <div className="text-blue-900 flex justify-between items-center">
+        <h2>Hello, {session.user.name}</h2>
+        <Image
+          src={session.user.image}
+          width={50}
+          height={50}
+          alt="user image"
+          className="rounded-full"
+        />
+      </div>
     </>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { BsShop } from "react-icons/bs";
 import {
@@ -8,33 +9,34 @@ import {
   MdOutlineInbox,
 } from "react-icons/md";
 
+const navItems = [
+  {
+    icon: <MdOutlineHome />,
+    name: "Dashboard",
+    path: "/",
+  },
+  {
+    icon: <MdOutlineInbox />,
+    name: "Products",
+    path: "/products",
+  },
+
+  {
+    icon: <MdListAlt />,
+    name: "Orders",
+    path: "/orders",
+  },
+  {
+    icon: <MdSettings />,
+    name: "Settings",
+    path: "/settings",
+  },
+];
+
 export default function Nav() {
-  const navItems = [
-    {
-      icon: <MdOutlineHome />,
-      name: "Dashboard",
-      path: "/",
-    },
-    {
-      icon: <MdOutlineInbox />,
-      name: "Products",
-      path: "/products",
-    },
-
-    {
-      icon: <MdListAlt />,
-      name: "Orders",
-      path: "/orders",
-    },
-    {
-      icon: <MdSettings />,
-      name: "Settings",
-      path: "/settings",
-    },
-  ];
-
-  const activeLink = "flex items-center space-x-2 p-1";
-  const inactiveLink = activeLink + " bg-white text-blue-900 rounded-l-lg ";
+  const pathname = usePathname();
+  const inactiveLink = "flex items-center space-x-2 p-1";
+  const activeLink = inactiveLink + " bg-white text-blue-900 rounded-l-lg ";
 
   return (
     <aside className="text-white p-4 pr-0">
@@ -45,10 +47,23 @@ export default function Nav() {
 
       <nav className="text-white flex-col space-y-2">
         {navItems.map(({ icon, name, path }) => {
-          let classList = path !== "/" ? activeLink : inactiveLink;
-          
+          if (path === "/")
+            return (
+              <Link
+                href={path}
+                key={name}
+                className={pathname === "/" ? activeLink : inactiveLink}
+              >
+                {icon}
+                <span>{name}</span>
+              </Link>
+            );
           return (
-            <Link href={path} key={name} className={classList}>
+            <Link
+              href={path}
+              key={name}
+              className={pathname.includes(path) ? activeLink : inactiveLink}
+            >
               {icon}
               <span>{name}</span>
             </Link>

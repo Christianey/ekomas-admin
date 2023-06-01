@@ -1,4 +1,3 @@
-// app/providers.tsx
 "use client";
 
 import { CacheProvider } from "@chakra-ui/next-js";
@@ -7,7 +6,6 @@ import { signIn, useSession } from "next-auth/react";
 
 export function Providers({ children }) {
   const { data: session } = useSession();
-  // console.log(session);
 
   let pageContent = !session ? (
     <main className="bg-blue-900 w-screen h-screen flex items-center">
