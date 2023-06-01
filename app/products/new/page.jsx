@@ -7,19 +7,22 @@ import {
   Text,
   FormLabel,
   Button,
-  Form,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
 export default function NewProduct() {
+  const toast = useToast();
   const formRef = useRef();
   const [formValues, setFormValues] = useState({
     name: "1",
     description: "1",
     price: 2,
   });
+  const [goBack, setGoBack] = useState(false);
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -28,10 +31,26 @@ export default function NewProduct() {
 
   const createProduct = async (e) => {
     e.preventDefault();
-    // console.log(formRef.current.reportValidity());
-
-    await axios.post("/api/products", formValues);
+    try {
+      await axios.post("/api/products", formValues);
+      toast({
+        title: "Product Created Successfully",
+        status: "success",
+        duration: 2000,
+        position: "top",
+      });
+      setGoBack(true);
+    } catch (error) {
+      toast({
+        title: "Something went wrong, please try again.",
+        status: "error",
+        duration: 2000,
+        position: "top",
+      });
+    }
   };
+
+  if (goBack) return redirect("/products");
 
   return (
     <form ref={formRef} onSubmit={createProduct}>

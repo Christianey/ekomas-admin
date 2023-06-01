@@ -3,11 +3,11 @@ import Product from "@/models/Product.";
 import { NextResponse } from "next/server";
 
 async function handler(req, res) {
-  const data = await req.json();
+  const product = await req.json();
   await mongooseConnect()
-  const result = await Product.create(data);
-  console.log(result);
-  return NextResponse.json({ result }, { status: 201 });
+  const data = await Product.create(product);
+  
+  return NextResponse.json({ data }, { status: 201 });
 }
 
 export { handler as POST };
