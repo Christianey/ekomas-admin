@@ -39,10 +39,7 @@ export default function NewProduct() {
         duration: 2000,
         position: "top",
       });
-      console.log("refreshing")
       router.refresh()
-      console.log("after refreshing")
-      // setGoBack(true);
       router.replace("/products")
     } catch (error) {
       toast({
@@ -53,8 +50,6 @@ export default function NewProduct() {
       });
     }
   };
-
-  // if (goBack) return router.push("/products");
 
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
@@ -101,7 +96,6 @@ async function createProduct(formValues) {
     },
     method: "POST",
     body: JSON.stringify(formValues),
-    cache: "no-cache",
   });
 
   if (!res.ok) throw new Error("failed to fetch data");
