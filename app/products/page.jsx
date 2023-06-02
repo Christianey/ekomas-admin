@@ -28,10 +28,12 @@ export default async function Products() {
 }
 
 async function getData() {
-  try {
-    const res = await import("../api/products/route");
-    return await (await res.GET()).json();
-  } catch (error) {
-    throw new Error("failed to fetch data");
-  }
+  let res = await fetch(`${process.env.HOST_URI}/api/products`, {
+    cache: "no-cache",
+  });
+  // console.log(process.env.HOST_URI);
+
+  if (!res.ok) throw new Error("failed to fetch data");
+
+  return res.json();
 }
