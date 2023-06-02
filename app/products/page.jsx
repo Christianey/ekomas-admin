@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 export default async function Products() {
-  const data = await getData();
+  const { data } = await getData();
   console.log(data);
 
   return (
