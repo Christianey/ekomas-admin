@@ -28,11 +28,10 @@ export default async function Products() {
 }
 
 async function getData() {
-  let res = await fetch("http://127.0.0.1:3000/api/products", {
-    cache: "no-store",
-  });
-
-  if (!res.ok) throw new Error("failed to fetch data");
-
-  return res.json();
+  try {
+    const res = await import("../api/products/route");
+    return await (await res.GET()).json();
+  } catch (error) {
+    throw new Error("failed to fetch data");
+  }
 }
