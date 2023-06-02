@@ -14,7 +14,7 @@ async function handleGET(req, res) {
   await mongooseConnect();
   const data = await Product.find();
 
-  return NextResponse.json({ data }, { status: 201 });
+  return NextResponse.json(data, { status: 200 });
 }
 
 export { handlePOST as POST, handleGET as GET };

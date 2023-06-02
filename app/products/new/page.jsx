@@ -9,12 +9,12 @@ import {
   Button,
   useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
 export default function NewProduct() {
+  const router = useRouter();
   const toast = useToast();
   const formRef = useRef();
   const [formValues, setFormValues] = useState({
@@ -29,17 +29,21 @@ export default function NewProduct() {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const createProduct = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/products", formValues);
+      await createProduct(formValues);
       toast({
         title: "Product Created Successfully",
         status: "success",
         duration: 2000,
         position: "top",
       });
-      setGoBack(true);
+      console.log("refreshing")
+      router.refresh()
+      console.log("after refreshing")
+      // setGoBack(true);
+      router.replace("/products")
     } catch (error) {
       toast({
         title: "Something went wrong, please try again.",
@@ -50,10 +54,10 @@ export default function NewProduct() {
     }
   };
 
-  if (goBack) return redirect("/products");
+  // if (goBack) return router.push("/products");
 
   return (
-    <form ref={formRef} onSubmit={createProduct}>
+    <form ref={formRef} onSubmit={handleSubmit}>
       <Text className="text-blue-900 text-xl font-bold mb-2" as="h1">
         New Product
       </Text>
@@ -88,4 +92,19 @@ export default function NewProduct() {
       </Button>
     </form>
   );
+}
+async function createProduct(formValues) {
+  let res = await fetch("/api/products", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(formValues),
+    cache: "no-cache",
+  });
+
+  if (!res.ok) throw new Error("failed to fetch data");
+
+  return res.json();
 }

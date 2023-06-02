@@ -3,12 +3,12 @@ import React from "react";
 import axios from "axios";
 
 export default async function Products() {
-  const { data } = await getData();
+  const data  = await getData();
 
   return (
     <>
       <Link
-        className="bg-blue-700 text-white p-3 rounded-md"
+        className="bg-blue-700 text-white p-3 rounded-md inline-block"
         href={"/products/new"}
       >
         Add new product
