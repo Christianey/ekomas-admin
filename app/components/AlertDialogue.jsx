@@ -46,7 +46,7 @@ export default function CautionAlertDialog({
         isOpen={isOpen}
         isCentered
       >
-        <AlertDialogOverlay />
+        <AlertDialogOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 
         <AlertDialogContent>
           <AlertDialogHeader>{cautionTitle}</AlertDialogHeader>
@@ -60,7 +60,12 @@ export default function CautionAlertDialog({
             >
               {disagree || "No"}
             </Button>
-            <Button className="bg-blue-900" {...BTN} onClick={handleClick} ml={3}>
+            <Button
+              className="bg-blue-900"
+              {...BTN}
+              onClick={handleClick}
+              ml={3}
+            >
               {agree || "Yes"}
             </Button>
           </AlertDialogFooter>
