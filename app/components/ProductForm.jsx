@@ -7,21 +7,6 @@ import axios from "axios";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
-async function createProduct(formValues) {
-  let res = await fetch("/api/products", {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    method: "POST",
-    body: JSON.stringify(formValues),
-  });
-
-  if (!res.ok) throw new Error("failed to fetch data");
-
-  return res.json();
-}
-
 export default function ProductForm({ name, description, price, _id }) {
   const router = useRouter();
   const toast = useToast();

@@ -33,4 +33,19 @@ async function handlePUT(req, res) {
   return NextResponse.json({ data }, { status: 200 });
 }
 
-export { handlePOST as POST, handleGET as GET, handlePUT as PUT };
+async function handleDELETE(req, res) {
+  await mongooseConnect();
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
+  const data = await Product.findByIdAndDelete(id);
+
+  return NextResponse.json({ data }, { status: 200 });
+}
+
+export {
+  handlePOST as POST,
+  handleGET as GET,
+  handlePUT as PUT,
+  handleDELETE as DELETE,
+};
