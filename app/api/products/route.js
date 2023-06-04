@@ -12,9 +12,17 @@ async function handlePOST(req, res) {
 
 async function handleGET(req, res) {
   await mongooseConnect();
-  const data = await Product.find();
+  let data;
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
 
-  return NextResponse.json({data}, { status: 200 });
+  if (id) {
+    data = await Product.findById(id);
+  } else {
+    data = await Product.find();
+  }
+
+  return NextResponse.json({ data }, { status: 200 });
 }
 
 export { handlePOST as POST, handleGET as GET };

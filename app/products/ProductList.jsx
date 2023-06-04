@@ -17,8 +17,8 @@ import { MdEdit, MdDelete } from "react-icons/md";
 
 export default function ProductList({ products }) {
   const handleClick = async (id) => {
-    const res = await axios.delete("/api/products/")
-  }
+    const res = await axios.delete("/api/products/");
+  };
 
   return (
     <TableContainer>
@@ -28,14 +28,17 @@ export default function ProductList({ products }) {
             <Th>Name</Th>
             <Th>Description</Th>
             <Th isNumeric>Price</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
-          {products?.map(({ name, description, price, _id }) => {
+          {products?.map((product) => {
+            const { name, description, price, _id } = product;
             return (
               <Tr key={_id}>
                 <Td>{name}</Td>
                 <Td>{description}</Td>
+                <Td isNumeric>{price}</Td>
                 <Td isNumeric>{price}</Td>
                 <Td>
                   <div className="flex space-x-2">
