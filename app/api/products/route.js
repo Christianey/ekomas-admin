@@ -25,4 +25,12 @@ async function handleGET(req, res) {
   return NextResponse.json({ data }, { status: 200 });
 }
 
-export { handlePOST as POST, handleGET as GET };
+async function handlePUT(req, res) {
+  await mongooseConnect();
+  const { _id: id, ...product } = await req.json();
+  const data = await Product.findByIdAndUpdate(id, product);
+
+  return NextResponse.json({ data }, { status: 200 });
+}
+
+export { handlePOST as POST, handleGET as GET, handlePUT as PUT };

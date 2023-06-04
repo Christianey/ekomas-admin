@@ -6,8 +6,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export default function EditProduct({ params: { id } }) {
-  console.log("edit rerendering");
-
   const [productInfo, setProductInfo] = useState(null);
 
   useEffect(() => {
@@ -17,8 +15,6 @@ export default function EditProduct({ params: { id } }) {
       setProductInfo(data );
     });
   }, [productInfo]);
-
-  console.log({ productInfo });
 
   return (
     <div>

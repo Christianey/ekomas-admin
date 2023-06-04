@@ -1,14 +1,28 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Input, Textarea, FormLabel, Button, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
-export default function ProductForm({ name, description, price }) {
-  console.log("form rerendering");
-  console.log({ name, description, price });
+async function createProduct(formValues) {
+  let res = await fetch("/api/products", {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+    body: JSON.stringify(formValues),
+  });
+
+  if (!res.ok) throw new Error("failed to fetch data");
+
+  return res.json();
+}
+
+export default function ProductForm({ name, description, price, _id }) {
   const router = useRouter();
   const toast = useToast();
   const formRef = useRef();
@@ -18,6 +32,12 @@ export default function ProductForm({ name, description, price }) {
     price: price || 0,
   });
 
+  const toastConstants = {
+    status: "success",
+    duration: 2000,
+    position: "top",
+  };
+
   const handleChange = ({ target }) => {
     const { value, name } = target;
     setFormValues({ ...formValues, [name]: value });
@@ -26,16 +46,23 @@ export default function ProductForm({ name, description, price }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await createProduct(formValues);
-      toast({
-        title: "Product Created Successfully",
-        status: "success",
-        duration: 2000,
-        position: "top",
-      });
+      if (_id) {
+        await axios.put("/api/products", { ...formValues, _id });
+        toast({
+          ...toastConstants,
+          title: "Product Edited Successfully",
+        });
+      } else {
+        await axios.post("/api/products", formValues);
+        toast({
+          ...toastConstants,
+          title: "Product Created Successfully",
+        });
+      }
       router.refresh();
       router.replace("/products");
     } catch (error) {
+      console.log(error)
       toast({
         title: "Something went wrong, please try again.",
         status: "error",

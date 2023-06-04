@@ -19,12 +19,9 @@ export default async function Products() {
 }
 
 async function getData() {
-  let res = await fetch(
-    `${process.env.HOST_URI}/api/products`
-    // , {
-    // cache: "no-cache",
-    // }
-  );
+  let res = await fetch(`${process.env.HOST_URI}/api/products`, {
+    cache: "no-cache",
+  });
 
   if (!res.ok) throw new Error("failed to fetch data");
 

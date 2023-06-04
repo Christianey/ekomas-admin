@@ -39,7 +39,6 @@ export default function ProductList({ products }) {
                 <Td>{name}</Td>
                 <Td>{description}</Td>
                 <Td isNumeric>{price}</Td>
-                <Td isNumeric>{price}</Td>
                 <Td>
                   <div className="flex space-x-2">
                     <Button
