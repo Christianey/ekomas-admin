@@ -4,6 +4,9 @@ import React, { useRef, useState } from "react";
 import { Input, Textarea, FormLabel, Button, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { BsUpload } from "react-icons/bs";
+import { CldImage, CldUploadButton } from "next-cloudinary";
+import CldUpload from "./CldUpload";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
@@ -15,6 +18,7 @@ export default function ProductForm({ name, description, price, _id }) {
     name: name || "",
     description: description || "",
     price: price || 0,
+    images: [],
   });
 
   const toastConstants = {
@@ -47,7 +51,7 @@ export default function ProductForm({ name, description, price, _id }) {
       router.refresh();
       router.replace("/products");
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast({
         title: "Something went wrong, please try again.",
         status: "error",
@@ -67,6 +71,30 @@ export default function ProductForm({ name, description, price, _id }) {
         onChange={handleChange}
         className={inputClasses}
       />
+
+      <FormLabel>Photos</FormLabel>
+      {formValues.images.length > 0 ? (
+        <div className="flex">
+          {formValues.images.map((image) => (
+            <CldImage
+              key={image}
+              width="100"
+              height="100"
+              src={image}
+              alt="Description of my image"
+              crop="fill"
+
+            />
+          ))}
+        </div>
+      ) : (
+        <CldUpload
+          setFormValues={setFormValues}
+          images={formValues.images}
+          formValues={formValues}
+        />
+      )}
+
       <FormLabel>Product Description</FormLabel>
       <Textarea
         name="description"

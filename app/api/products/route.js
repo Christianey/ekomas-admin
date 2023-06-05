@@ -2,8 +2,9 @@ import { mongooseConnect } from "@/lib/mongoose";
 import Product from "@/models/Product.";
 import { NextResponse } from "next/server";
 
+mongooseConnect()
+
 async function handlePOST(req, res) {
-  await mongooseConnect();
   const product = await req.json();
   const data = await Product.create(product);
 
@@ -11,7 +12,6 @@ async function handlePOST(req, res) {
 }
 
 async function handleGET(req, res) {
-  await mongooseConnect();
   let data;
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
@@ -26,7 +26,6 @@ async function handleGET(req, res) {
 }
 
 async function handlePUT(req, res) {
-  await mongooseConnect();
   const { _id: id, ...product } = await req.json();
   const data = await Product.findByIdAndUpdate(id, product);
 
@@ -34,7 +33,6 @@ async function handlePUT(req, res) {
 }
 
 async function handleDELETE(req, res) {
-  await mongooseConnect();
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 
