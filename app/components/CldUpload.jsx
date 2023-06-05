@@ -6,7 +6,6 @@ export default function CldUpload({ setFormValues, images, formValues }) {
   const [uploadedImages, setUploadedImages] = useState([]);
 
   const handleUpload = ({ event, info }) => {
-    console.log({ info, event });
     if (event === "success") {
       setUploadedImages([...uploadedImages, info.secure_url]);
     }
@@ -17,9 +16,7 @@ export default function CldUpload({ setFormValues, images, formValues }) {
       onError={() => {
         return;
       }}
-      onClose={(params) => {
-        console.log("running onclose");
-        console.log({ params });
+      onClose={() => {
         setFormValues({ ...formValues, images: uploadedImages });
       }}
       uploadPreset="wvcmcbnx"
