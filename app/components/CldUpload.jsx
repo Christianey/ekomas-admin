@@ -1,8 +1,12 @@
-import {useState} from "react"
+import { useState } from "react";
 import { CldUploadWidget } from "next-cloudinary";
 import { BsUpload } from "react-icons/bs";
 
-export default function CldUpload({ setFormValues, formValues, buttonText = "Upload" }) {
+export default function CldUpload({
+  setFormValues,
+  formValues,
+  buttonText = "Upload",
+}) {
   const [uploadedImages, setUploadedImages] = useState([]);
 
   const handleUpload = ({ event, info }) => {
@@ -17,7 +21,9 @@ export default function CldUpload({ setFormValues, formValues, buttonText = "Upl
         return;
       }}
       onClose={() => {
-        setFormValues({ ...formValues, images: uploadedImages });
+        if (uploadedImages.length > 0) {
+          setFormValues({ ...formValues, images: uploadedImages });
+        }
       }}
       uploadPreset="wvcmcbnx"
       onUpload={handleUpload}
