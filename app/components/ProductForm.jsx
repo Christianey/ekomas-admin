@@ -10,7 +10,7 @@ import CldUpload from "./CldUpload";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
-export default function ProductForm({ name, description, price, _id }) {
+export default function ProductForm({ name, description, price, _id, images }) {
   const router = useRouter();
   const toast = useToast();
   const formRef = useRef();
@@ -18,8 +18,10 @@ export default function ProductForm({ name, description, price, _id }) {
     name: name || "",
     description: description || "",
     price: price || 0,
-    images: [],
+    images: images || [],
   });
+
+  console.log({ images: formValues.images });
 
   const toastConstants = {
     status: "success",
@@ -42,7 +44,7 @@ export default function ProductForm({ name, description, price, _id }) {
           title: "Product Edited Successfully",
         });
       } else {
-        await axios.post("/api/products", formValues);
+        await axios.post("/api/products", { ...formValues });
         toast({
           ...toastConstants,
           title: "Product Created Successfully",
@@ -74,18 +76,24 @@ export default function ProductForm({ name, description, price, _id }) {
 
       <FormLabel>Photos</FormLabel>
       {formValues.images.length > 0 ? (
-        <div className="flex">
+        <div className="flex space-x-2">
           {formValues.images.map((image) => (
             <CldImage
+              className="rounded-lg overflow-hidden"
               key={image}
               width="100"
               height="100"
               src={image}
               alt="Description of my image"
               crop="fill"
-
             />
           ))}
+          <CldUpload
+            setFormValues={setFormValues}
+            images={formValues.images}
+            formValues={formValues}
+            buttonText="Change"
+          />
         </div>
       ) : (
         <CldUpload
