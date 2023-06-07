@@ -1,5 +1,6 @@
 "use client";
 
+import GoBack from "@/app/components/GoBack";
 import ProductForm from "@/app/components/ProductForm";
 import { Text } from "@chakra-ui/react";
 import axios from "axios";
@@ -18,7 +19,8 @@ export default function EditProduct({ params: { id } }) {
 
   return (
     <div>
-      <Text className="text-blue-900 text-xl font-bold mb-2" as="h1">
+      <Text className="text-blue-900 text-xl font-bold mb-2 flex items-center gap-2" as="h1">
+        <GoBack />
         Edit Product
       </Text>
       {productInfo && <ProductForm {...productInfo} />}

@@ -3,7 +3,6 @@ import { NextResponse, NextRequest } from "next/server";
 import { Form } from "multiparty";
 
 async function handleUpload(req, res) {
-  console.log("handling upload");
   try {
     const form = new Form();
     // const reqHeadersList = Object.fromEntries(req.headers);

@@ -7,6 +7,7 @@ import {
   MdSettings,
   MdListAlt,
   MdOutlineInbox,
+  MdCategory,
 } from "react-icons/md";
 
 const navItems = [
@@ -19,6 +20,11 @@ const navItems = [
     icon: <MdOutlineInbox />,
     name: "Products",
     path: "/products",
+  },
+  {
+    icon: <MdCategory />,
+    name: "Categories",
+    path: "/categories",
   },
 
   {
