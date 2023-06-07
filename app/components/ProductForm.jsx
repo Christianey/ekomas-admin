@@ -21,8 +21,6 @@ export default function ProductForm({ name, description, price, _id, images }) {
     images: images || [],
   });
 
-  console.log({ images: formValues.images });
-
   const toastConstants = {
     status: "success",
     duration: 2000,

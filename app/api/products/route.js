@@ -28,7 +28,6 @@ async function handleGET(req) {
 async function handlePUT(req) {
   const { _id: id, ...product } = await req.json();
   const data = await Product.findByIdAndUpdate(id, product);
-  console.log({ data });
 
   return NextResponse.json({ data }, { status: 200 });
 }

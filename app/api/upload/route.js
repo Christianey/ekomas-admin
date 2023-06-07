@@ -1,13 +1,9 @@
 import busboy from "busboy";
 import { NextResponse, NextRequest } from "next/server";
-import headers from "next/headers";
 import { Form } from "multiparty";
 
 async function handleUpload(req, res) {
   console.log("handling upload");
-  // req.on("data", (cons) => {
-  //   console.log(cons);
-  // });
   try {
     const form = new Form();
     // const reqHeadersList = Object.fromEntries(req.headers);

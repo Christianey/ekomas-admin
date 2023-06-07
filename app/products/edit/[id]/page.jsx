@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 
 export default function EditProduct({ params: { id } }) {
   const [productInfo, setProductInfo] = useState(null);
-  console.log({ productInfo });
 
   useEffect(() => {
     if (!id || productInfo?.name) return;
