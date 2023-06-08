@@ -26,33 +26,30 @@ const initialValues = {
 };
 export default function Categories() {
   const router = useRouter();
-  const [editCategory, setEditCategory] = useState(false);
-  const [formValues, setFormValues] = useState(initialValues);
-
-  const [selectOptions, setSelectOptions] = useState([]);
-
-  const handleChange = ({ target }) => {
-    const { value, name } = target;
-    setFormValues({ ...formValues, [name]: value });
-  };
+  const [editedCategory, setEditedCategory] = useState(null);
+  const [parent, setParent] = useState("");
+  const [name, setName] = useState(null);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     axios.get("/api/category").then(({ data }) => {
-      setSelectOptions(data);
+      setCategories(data);
     });
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post("api/category", formValues).then(({ data }) => {
-      setFormValues(initialValues);
+    axios.post("api/category", { name, parent }).then(({ data }) => {
+      setName("");
+      setParent("");
       router.refresh();
     });
   };
 
   const handleEdit = (category) => {
-    setEditCategory(true);
-    setFormValues(category);
+    setEditedCategory(category);
+    setName(category.name);
+    setParent(category.parent?._id || "");
   };
 
   return (
@@ -67,15 +64,15 @@ export default function Categories() {
         className="text-blue-900 text-lg mb-2 flex items-center gap-2"
         as="h1"
       >
-        {editCategory ? "Edit Category" : "Add New Category"}
+        {editedCategory ? "Edit Category" : "Add New Category"}
       </Text>
 
       <form onSubmit={handleSubmit} className="flex gap-2 items-center mb-6">
         <Input
           name="name"
-          value={formValues.name}
+          value={name}
           placeholder="Category Name"
-          onChange={handleChange}
+          onChange={(e) => setName(e.target.value)}
           className="focus:border-blue-900 border-gray-200"
           sx={{
             "& ~ .chakra-select__wrapper": {
@@ -83,14 +80,16 @@ export default function Categories() {
             },
           }}
         />
-        <Select onChange={handleChange} className="basis-2/12" name="parent">
-          <option key={"parent"} value={null}>
-            Select Parent Category
-          </option>
-          {selectOptions?.map((option) => {
+        <Select
+          onChange={(e) => setParent(e.target.value)}
+          className="basis-2/12"
+          value={parent}
+        >
+          <option value="">Select category</option>
+          {categories?.map((category) => {
             return (
-              <option key={option._id} value={option._id}>
-                {option.name}
+              <option key={category._id} value={category._id}>
+                {category.name}
               </option>
             );
           })}
@@ -110,7 +109,7 @@ export default function Categories() {
             </Tr>
           </Thead>
           <Tbody>
-            {selectOptions?.map((category) => {
+            {categories?.map((category) => {
               const { name, parent, _id } = category;
               return (
                 <Tr key={_id}>
