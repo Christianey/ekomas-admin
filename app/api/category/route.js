@@ -1,13 +1,13 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { NextResponse } from "next/server";
-import Product from "../models/Product.";
+import Category from "../models/Category";
 
 mongooseConnect();
 
 async function handlePOST(req) {
-  const product = await req.json();
-  const data = await Product.create(product);
-
+  const category = await req.json();
+  const data = await Category.create(category);
+  
   return NextResponse.json({ data }, { status: 201 });
 }
 
@@ -17,26 +17,26 @@ async function handleGET(req) {
   const id = searchParams.get("id");
 
   if (id) {
-    data = await Product.findById(id);
+    data = await Category.findById(id);
   } else {
-    data = await Product.find();
+    data = await Category.find().populate("parent");
   }
 
-  return NextResponse.json({ data }, { status: 200 });
+  return NextResponse.json(data, { status: 200 });
 }
 
 async function handlePUT(req) {
-  const { _id: id, ...product } = await req.json();
-  const data = await Product.findByIdAndUpdate(id, product);
+  const { _id: id, ...category } = await req.json();
+  const data = await Category.findByIdAndUpdate(id, category);
 
-  return NextResponse.json({ data }, { status: 200 });
+  return NextResponse.json(data, { status: 200 });
 }
 
 async function handleDELETE(req) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
 
-  const data = await Product.findByIdAndDelete(id);
+  const data = await Category.findByIdAndDelete(id);
 
   return NextResponse.json({ data }, { status: 200 });
 }
