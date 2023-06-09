@@ -28,7 +28,7 @@ export default function Categories() {
   const router = useRouter();
   const [editedCategory, setEditedCategory] = useState(null);
   const [parent, setParent] = useState("");
-  const [name, setName] = useState(null);
+  const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -39,7 +39,8 @@ export default function Categories() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post("api/category", { name, parent }).then(({ data }) => {
+    let data = { name, ...(parent && { parent }) };
+    axios.post("api/category", data).then(({ data }) => {
       setName("");
       setParent("");
       router.refresh();
@@ -69,22 +70,17 @@ export default function Categories() {
 
       <form onSubmit={handleSubmit} className="flex gap-2 items-center mb-6">
         <Input
-          name="name"
           value={name}
           placeholder="Category Name"
           onChange={(e) => setName(e.target.value)}
           className="focus:border-blue-900 border-gray-200"
           sx={{
             "& ~ .chakra-select__wrapper": {
-              flexBasis: "16.666667%",
+              flexBasis: "33.333333%",
             },
           }}
         />
-        <Select
-          onChange={(e) => setParent(e.target.value)}
-          className="basis-2/12"
-          value={parent}
-        >
+        <Select onChange={(e) => setParent(e.target.value)} value={parent}>
           <option value="">Select category</option>
           {categories?.map((category) => {
             return (

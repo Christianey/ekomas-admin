@@ -7,12 +7,12 @@ import axios from "axios";
 import { BsUpload } from "react-icons/bs";
 import { CldImage, CldUploadButton } from "next-cloudinary";
 import CldUpload from "./CldUpload";
+import { errorNotifier, successNotifier } from "./NotificationHandler";
 
 let inputClasses = "focus:border-blue-900 border-gray-200 mb-2";
 
 export default function ProductForm({ name, description, price, _id, images }) {
   const router = useRouter();
-  const toast = useToast();
   const formRef = useRef();
   const [formValues, setFormValues] = useState({
     name: name || "",
@@ -21,11 +21,6 @@ export default function ProductForm({ name, description, price, _id, images }) {
     images: images || [],
   });
 
-  const toastConstants = {
-    status: "success",
-    duration: 2000,
-    position: "top",
-  };
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -37,27 +32,16 @@ export default function ProductForm({ name, description, price, _id, images }) {
     try {
       if (_id) {
         await axios.put("/api/products", { ...formValues, _id });
-        toast({
-          ...toastConstants,
-          title: "Product Edited Successfully",
-        });
+        successNotifier("Product Edited Successfully")
       } else {
         await axios.post("/api/products", { ...formValues });
-        toast({
-          ...toastConstants,
-          title: "Product Created Successfully",
-        });
+        successNotifier("Product Created Successfully")
       }
       router.refresh();
       router.replace("/products");
     } catch (error) {
       console.log(error);
-      toast({
-        title: "Something went wrong, please try again.",
-        status: "error",
-        duration: 2000,
-        position: "top",
-      });
+      errorNotifier()
     }
   };
 
