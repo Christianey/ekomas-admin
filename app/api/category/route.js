@@ -6,7 +6,6 @@ mongooseConnect();
 
 async function handlePOST(req) {
   const category = await req.json();
-  console.log({ category });
   const data = await Category.create(category);
 
   return NextResponse.json({ data }, { status: 201 });

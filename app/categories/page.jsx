@@ -18,15 +18,14 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import CautionAlertDialog from "../components/AlertDialogue";
 import { MdDelete, MdEdit } from "react-icons/md";
-import Link from "next/link";
+import {
+  errorNotifier,
+  successNotifier,
+} from "../components/NotificationHandler";
 
-const initialValues = {
-  name: "",
-  parent: null,
-};
 export default function Categories() {
   const router = useRouter();
-  const [editedCategory, setEditedCategory] = useState(null);
+  const [editedCategory, setEditedCategory] = useState(false);
   const [parent, setParent] = useState("");
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
@@ -35,7 +34,7 @@ export default function Categories() {
     axios.get("/api/category").then(({ data }) => {
       setCategories(data);
     });
-  }, []);
+  }, [categories]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,12 +42,24 @@ export default function Categories() {
     axios.post("api/category", data).then(({ data }) => {
       setName("");
       setParent("");
+      successNotifier("Category Added Successfully");
       router.refresh();
     });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/category?id=${id}`);
+      successNotifier("Category Deleted Successfully");
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      errorNotifier();
+    }
+  };
+
   const handleEdit = (category) => {
-    setEditedCategory(category);
+    setEditedCategory(true);
     setName(category.name);
     setParent(category.parent?._id || "");
   };
@@ -93,6 +104,18 @@ export default function Categories() {
         <Button type="submit" className="bg-blue-900 text-white basis-2/12">
           Save
         </Button>
+        {editedCategory && (
+          <Button
+            onClick={() => {
+              setName("");
+              setParent("");
+              setEditedCategory(false);
+            }}
+            className="bg-red-700 text-white basis-2/12"
+          >
+            Cancel
+          </Button>
+        )}
       </form>
 
       <TableContainer className="mx-auto justify-center">

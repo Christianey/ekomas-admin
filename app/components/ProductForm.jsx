@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { Input, Textarea, FormLabel, Button, useToast } from "@chakra-ui/react";
+import { Input, Textarea, FormLabel, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { BsUpload } from "react-icons/bs";
 import { CldImage, CldUploadButton } from "next-cloudinary";
 import CldUpload from "./CldUpload";
 import { errorNotifier, successNotifier } from "./NotificationHandler";
