@@ -152,7 +152,7 @@ export default function Categories() {
         {properties.length > 0 &&
           properties.map((property, index) => {
             return (
-              <Flex gap="1" mb={2}>
+              <Flex gap="1" mb={2} key={index}>
                 <Input
                   onChange={(ev) =>
                     handlePropertyChange(index, "name", ev.target.value)
