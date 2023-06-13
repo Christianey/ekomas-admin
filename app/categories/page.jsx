@@ -1,7 +1,10 @@
 "use client";
 
 import {
+  Box,
   Button,
+  Flex,
+  FormLabel,
   Input,
   Select,
   Table,
@@ -29,8 +32,10 @@ export default function Categories() {
   const [parent, setParent] = useState("");
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
+  const [properties, setProperties] = useState([]);
 
   useEffect(() => {
+    if (categories.length > 0) return;
     axios.get("/api/category").then(({ data }) => {
       setCategories(data);
     });
@@ -62,6 +67,22 @@ export default function Categories() {
     setEditedCategory(true);
     setName(category.name);
     setParent(category.parent?._id || "");
+  };
+
+  const addProperty = () => {
+    setProperties([...properties, { name: "", values: "" }]);
+  };
+
+  const removeProperty = (removeIndex) => {
+    return setProperties(
+      properties.filter((_, index) => removeIndex !== index)
+    );
+  };
+
+  const handlePropertyChange = (index, inputName, newValue) => {
+    const changedProperties = [...properties];
+    properties[index][inputName] = newValue;
+    setProperties(changedProperties);
   };
 
   return (
@@ -117,6 +138,47 @@ export default function Categories() {
           </Button>
         )}
       </form>
+
+      <FormLabel>Properties</FormLabel>
+      <Button
+        size="sm"
+        onClick={addProperty}
+        className="bg-blue-900 mb-2"
+        color="white"
+      >
+        Add new Property
+      </Button>
+      <Box mb={2}>
+        {properties.length > 0 &&
+          properties.map((property, index) => {
+            return (
+              <Flex gap="1" mb={2}>
+                <Input
+                  onChange={(ev) =>
+                    handlePropertyChange(index, "name", ev.target.value)
+                  }
+                  value={property.name}
+                  placeholder="property eg. color"
+                />
+                <Input
+                  onChange={(ev) =>
+                    handlePropertyChange(index, "values", ev.target.value)
+                  }
+                  value={property.values}
+                  placeholder="Values (comma separated)"
+                />
+                <Button
+                  onClick={() => {
+                    removeProperty(index);
+                  }}
+                  className="bg-red-700 text-white basis-2/12"
+                >
+                  Remove
+                </Button>
+              </Flex>
+            );
+          })}
+      </Box>
 
       <TableContainer className="mx-auto justify-center">
         <Table variant="simple" size="md">
