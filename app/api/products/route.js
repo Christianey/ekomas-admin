@@ -14,6 +14,7 @@ async function handlePOST(req) {
 async function handleGET(req) {
   let data;
   const { searchParams } = new URL(req.url);
+
   const id = searchParams.get("id");
 
   if (id) {

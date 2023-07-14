@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { Input, Textarea, FormLabel, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { CldImage, CldUploadButton } from "next-cloudinary";
+import { CldImage } from "next-cloudinary";
 import CldUpload from "./CldUpload";
 import { errorNotifier, successNotifier } from "./NotificationHandler";
 
@@ -20,7 +20,6 @@ export default function ProductForm({ name, description, price, _id, images }) {
     images: images || [],
   });
 
-
   const handleChange = ({ target }) => {
     const { value, name } = target;
     setFormValues({ ...formValues, [name]: value });
@@ -31,16 +30,16 @@ export default function ProductForm({ name, description, price, _id, images }) {
     try {
       if (_id) {
         await axios.put("/api/products", { ...formValues, _id });
-        successNotifier("Product Edited Successfully")
+        successNotifier("Product Edited Successfully");
       } else {
         await axios.post("/api/products", { ...formValues });
-        successNotifier("Product Created Successfully")
+        successNotifier("Product Created Successfully");
       }
       router.refresh();
       router.replace("/products");
     } catch (error) {
       console.log(error);
-      errorNotifier()
+      errorNotifier();
     }
   };
 
